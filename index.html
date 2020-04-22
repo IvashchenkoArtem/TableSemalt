@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- <link rel="shortcut icon" href="img/favicon.ico"> -->
+  <title>Semalt. Test task</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="" />
+  <link rel="stylesheet" type="text/css" media="screen, projection" href="css/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/ed5bf6f175.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <div class="mainer" id="app">
+
+    <section class="header">
+      <div class="header__wrap">
+        <h2>Submitted sitemaps</h2>
+        <i class="fas fa-info-circle header__wrap-info"></i>
+      </div>
+      <div class="header__wrap">
+        <span class="header__wrap-control" v-show="isVisible">Selected sitemaps: {{count}}</span>
+        <span class="header__wrap-control">
+          <button class="header__wrap-control-btn" :disabled="!isVisible">
+            Recrawl sitemap</button>
+        </span>
+        <span class="header__wrap-control">
+          <button class="header__wrap-control-btn header__wrap-control-btn--rem" :disabled="!isVisible">
+            Remove sitemap</button>
+        </span>
+      </div>
+    </section>
+
+    <section class="filters">
+      <h5 class="filters__title">Filters:</h5>
+      <div class="filters-wrapper">
+        <input class="filters-wrapper__item" type="text" placeholder="URL or its part">
+        <select class="filters-wrapper__item">
+          <option value="All types">All types</option>
+        </select>
+        <select class="filters-wrapper__item">
+          <option value="Submitted">Submitted</option>
+        </select>
+        <select class="filters-wrapper__item">
+          <option value="data"> 2/12/19 - 2/12..</option>
+        </select>
+        <select class="filters-wrapper__item" v-model="filter">
+          <option value="All sitemaps">All sitemaps</option>
+          <option value="Success">Success</option>
+          <option value="Couldn't fetch">Couldn't fetch</option>
+          <option value="Errors">Errors</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="body">
+      <table class="tbl">
+        <tr>
+          <th> <input type="checkbox" @click="setCheckBoxes()" v-model="allCheckBox">
+            Sitemap
+            ({{ sitemapsDisplay.length }})</th>
+          <th>Type</th>
+          <th>Submitted</th>
+          <th>Last check</th>
+          <th>Status</th>
+          <th>URLs</th>
+          <th>Recrawl <br>sitemap</th>
+          <th>Remove <br>sitemap</th>
+        </tr>
+
+        <tr v-for="sitemap in sitemapsDisplay" :class="{done: !sitemap.isPending}">
+          <td>
+            <input type="checkbox" @change="sitemap.isPending = !sitemap.isPending" v-model="sitemap.isDone">
+            <a :href="sitemap.path">{{sitemap.path}}</a>
+          </td>
+          <td>
+            Sitemap <br>index
+          </td>
+          <td>
+            {{sitemap.lastSubmitted | formatDate}}
+          </td>
+          <td>
+            {{sitemap.lastCheck | formatDate}}
+          </td>
+          <td v-if="sitemap.errors == 0" :style="{'color':'green'}">
+            Success
+          </td>
+          <td v-else :style="{'color':'red'}">
+            {{sitemap.errors}} errors
+          </td>
+          <td>
+            {{sitemap.urls}}
+          </td>
+          <td>
+            <button class="tbl__btn-recrawl">Recrawl</button>
+          </td>
+          <td>
+            <button class="tbl__btn-delete" title="Remove from Search Console"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+
+      </table>
+    </section>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
+    integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="js/script.js"></script>
+
+</body>
+
+</html>
